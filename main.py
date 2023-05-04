@@ -7,9 +7,7 @@ import MD5
 import Monoalphabetic
 import Utilities
 import csv
-filepath = 'resources/maindataframe.csv'
 
-ciphertextlist = list()
 """         RSA    
 RSA = RSAencryption.RSA()
 
@@ -63,6 +61,10 @@ with open('MD5cipher.csv', 'w') as file:
 print(len(ciphertextlist))
 
 """
+classnamesource = "resources/classnames.csv"
+filepath = 'resources/'
+
+ciphertextlist = list()
 directory = "ciphers"
 
 maindict = Utilities.maindictionary
@@ -76,11 +78,19 @@ maindf = pd.DataFrame(columns=allcolumns)
 
 # print(ngramkeylist)
 classnames = dict()
+resultdfdict = {}
+start = 0
+step = 1
+
+
 
 for classnum, item in enumerate(Utilities.iterateoverfiles(directory)):
-    if classnum == 0:
+    print(item)
+    if classnum == 5:
         #print(item)
-        classnames[item.split("\\")[1].split(".")[0]] = item
+        classname = item.split("\\")[1].split(".")[0]
+        classnames[classname] = classnum
+        filepath = filepath + classname+'.csv'
         cipherdf = pd.read_csv(item, header=None)
         # cipherdf = cipherdf.T.head(1)
         cipherdf = cipherdf.T
@@ -88,6 +98,7 @@ for classnum, item in enumerate(Utilities.iterateoverfiles(directory)):
         #print("-------" * 10)
         print(len(cipherdf))
         for row in range(len(cipherdf)):
+            print(row)
             # Initialize variables lists
             alphacount = 0
             nonalphanumcount = 0
@@ -146,12 +157,19 @@ for classnum, item in enumerate(Utilities.iterateoverfiles(directory)):
             ngramdict = Utilities.word2ngramdict(mystr)
             # Creating row for main dataframe
             finaldict = {**featuredict, **ngramdict}
-
+            resultdfdict[start] = finaldict
+            start += step
+            """ OTHER METHOD
             new_df = pd.DataFrame(finaldict, index=[0])
             maindf = pd.concat([maindf, new_df], ignore_index=True)
+            """
 
 
             #print(finaldict)
-print(classnames)
+maindf = pd.DataFrame.from_dict(resultdfdict, orient='index')
+#classdf =pd.DataFrame.from_dict(classnames, orient='index')
+#print(classnames)
 print(maindf.shape)
 maindf.to_csv(filepath)
+#classdf.to_csv(classnamesource)
+
