@@ -7,6 +7,7 @@ import MD5
 import Monoalphabetic
 import Utilities
 import csv
+filepath = 'resources/maindataframe.csv'
 
 ciphertextlist = list()
 """         RSA    
@@ -68,17 +69,24 @@ maindict = Utilities.maindictionary
 ngramkeylist = list(maindict.keys())
 additionalfeatures = ['Cipher', 'Class', 'Length', 'Alphanumeric', 'Non-Alphanumeric',
                       'Alpha', 'Digit', 'Lowercase', 'Uppercase']
+allcolumns = additionalfeatures + ngramkeylist
+
+maindf = pd.DataFrame(columns=allcolumns)
+
+
 # print(ngramkeylist)
-classnames = list()
+classnames = dict()
 
 for classnum, item in enumerate(Utilities.iterateoverfiles(directory)):
     if classnum == 0:
-        print(item)
-        classnames.append(item.split("\\")[1].split(".")[0])
+        #print(item)
+        classnames[item.split("\\")[1].split(".")[0]] = item
         cipherdf = pd.read_csv(item, header=None)
-        cipherdf = cipherdf.T.head(1)
-        print(cipherdf)
-        print("-------" * 10)
+        # cipherdf = cipherdf.T.head(1)
+        cipherdf = cipherdf.T
+        #print(cipherdf)
+        #print("-------" * 10)
+        print(len(cipherdf))
         for row in range(len(cipherdf)):
             # Initialize variables lists
             alphacount = 0
@@ -137,5 +145,13 @@ for classnum, item in enumerate(Utilities.iterateoverfiles(directory)):
             # Generating ngram dictionary of cipher
             ngramdict = Utilities.word2ngramdict(mystr)
             # Creating row for main dataframe
+            finaldict = {**featuredict, **ngramdict}
 
+            new_df = pd.DataFrame(finaldict, index=[0])
+            maindf = pd.concat([maindf, new_df], ignore_index=True)
+
+
+            #print(finaldict)
 print(classnames)
+print(maindf.shape)
+maindf.to_csv(filepath)
