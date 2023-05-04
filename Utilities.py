@@ -20,17 +20,18 @@ bigram = list()
 bigramtuple = list(itertools.product(mainsequence, mainsequence))
 for item in bigramtuple:
     bigram.append(item[0] + item[1])
-
+""" TOO MUCH COMPLEXITY
 trigram = list()
 trigramtuple = list(itertools.product(mainsequence, mainsequence, mainsequence))
 for item in trigramtuple:
     trigram.append(item[0] + item[1] + item[2])
-
+"""
 bigramdict = dict.fromkeys(bigram, 0)
+"""
 trigramdict = dict.fromkeys(trigram, 0)
-
+"""
 maindictionary = {**lettersdict, **digitsdict,
-                  **punctuationsdict, **bigramdict, **trigramdict}
+                  **punctuationsdict, **bigramdict}
 
 
 def pad(text):
@@ -64,8 +65,10 @@ def top10000pass():
 def word2ngramdict(text):
     textunigrams = getunigramdict(text)
     textbigrams = getngram2dict(text)
+    """ TOO MUCH COMPLEXITY
     texttrigrams = getngram3dict(text)
-    totalgrams = {**textunigrams, **textbigrams, **texttrigrams}
+    """
+    totalgrams = {**textunigrams, **textbigrams}
     textdictionary = maindictionary.copy()
     textdictionary.update(totalgrams)
     return textdictionary
