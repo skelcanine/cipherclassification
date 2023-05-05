@@ -72,7 +72,7 @@ ngramkeylist = list(maindict.keys())
 additionalfeatures = ['Cipher', 'Class', 'Length', 'Alphanumeric', 'Non-Alphanumeric',
                       'Alpha', 'Digit', 'Lowercase', 'Uppercase']
 allcolumns = additionalfeatures + ngramkeylist
-
+print(len(allcolumns))
 maindf = pd.DataFrame(columns=allcolumns)
 
 
@@ -86,7 +86,7 @@ step = 1
 
 for classnum, item in enumerate(Utilities.iterateoverfiles(directory)):
     print(item)
-    if classnum == 5:
+    if classnum == 4:
         #print(item)
         classname = item.split("\\")[1].split(".")[0]
         classnames[classname] = classnum
@@ -98,7 +98,7 @@ for classnum, item in enumerate(Utilities.iterateoverfiles(directory)):
         #print("-------" * 10)
         print(len(cipherdf))
         for row in range(len(cipherdf)):
-            print(row)
+            #print(row)
             # Initialize variables lists
             alphacount = 0
             nonalphanumcount = 0
@@ -155,8 +155,11 @@ for classnum, item in enumerate(Utilities.iterateoverfiles(directory)):
                 featuredict[feature] = featurelist[j]
             # Generating ngram dictionary of cipher
             ngramdict = Utilities.word2ngramdict(mystr)
+
             # Creating row for main dataframe
             finaldict = {**featuredict, **ngramdict}
+            if len(finaldict) != 8939:
+                continue
             resultdfdict[start] = finaldict
             start += step
             """ OTHER METHOD

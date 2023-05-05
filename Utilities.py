@@ -33,7 +33,7 @@ trigramdict = dict.fromkeys(trigram, 0)
 maindictionary = {**lettersdict, **digitsdict,
                   **punctuationsdict, **bigramdict}
 
-
+#print(len(maindictionary))
 def pad(text):
     n = len(text) % 8
     # print(n)
