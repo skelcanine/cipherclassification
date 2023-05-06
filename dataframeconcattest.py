@@ -1,6 +1,3 @@
-import collections
-import string
-
 import pandas as pd
 
 # Create dummy data
